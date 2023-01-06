@@ -7,11 +7,13 @@ import {
   Text,
 } from 'react-native';
 import {useNavigation} from '@react-navigation/native';
+import {useSafeAreaFrame} from 'react-native-safe-area-context';
 import * as ScreenOrientation from 'expo-screen-orientation';
 
 const HomeScreen = () => {
   const navigation = useNavigation();
-  const {height, width} = useWindowDimensions();
+  const {height: heightRN, width: widthRN} = useWindowDimensions();
+  const {height: heightRNSAC, width: widthRNSAC} = useSafeAreaFrame();
 
   ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_UP);
 
@@ -42,11 +44,42 @@ const HomeScreen = () => {
         style={{
           marginBottom: 20,
         }}>
-        Width: {width}, Height: {height}
+        useSafeAreaFrame, react-native-safe-area-context
+      </Text>
+      <Text
+        style={{
+          marginBottom: 20,
+        }}>
+        Width: {widthRNSAC}, Height: {heightRNSAC}
       </Text>
       <View
         style={{
-          width,
+          width: widthRNSAC,
+          backgroundColor: '#eeccee',
+          marginBottom: 50,
+        }}>
+        <Text>
+          This text should fill the entire screen and not exceed boundaries.
+          This text should fill the entire screen and not exceed boundaries.
+          This text should fill the entire screen and not exceed boundaries.
+          This text should fill the entire screen and not exceed boundaries.
+        </Text>
+      </View>
+      <Text
+        style={{
+          marginBottom: 20,
+        }}>
+        useWindowDimensions, React Native
+      </Text>
+      <Text
+        style={{
+          marginBottom: 20,
+        }}>
+        Width: {widthRN}, Height: {heightRN}
+      </Text>
+      <View
+        style={{
+          width: widthRN,
           backgroundColor: '#eeccee',
         }}>
         <Text>
