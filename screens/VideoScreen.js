@@ -1,36 +1,45 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Video from 'react-native-video';
-import { Button, SafeAreaView } from 'react-native';
-import { useNavigation } from "@react-navigation/native";
+import { SafeAreaView, Text } from 'react-native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 const VideoScreen = () => {
   const navigation = useNavigation();
+  const route = useRoute();
+  const [loading, setLoading] = useState(true);
 
-  function fullScreen() {
-    console.log(this.videoPlayer.presentFullscreenPlayer());
+  const fullScreenPlayer = () => {
+    videoPlayer.presentFullscreenPlayer();
+    setLoading(false);
   }
 
-  const videoStyle = {
-    display: 'none',
-    position: 'absolute',
-    top: 100,
-    left: 0,
-    bottom: 0,
-    right: 0,
-    height: 250,
-  };
-
+  const playerDismissed = () => {
+    navigation.navigate('Home');
+  }
 
   return (
-    <SafeAreaView style={{backgroundColor: "black"}}>    
+    <SafeAreaView 
+      style={{
+        flex: 1, 
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'black',
+        position: 'absolute', 
+        top: 0,
+        bottom: 0,
+        left: 0, 
+        right: 0
+    }}>
+      
+      {loading && <Text style={{color: "white"}}>Loading...</Text>}
+      
       <Video
-        source={{uri: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4'}}
-        ref={p => {this.videoPlayer = p;}}
-        resizeMode="cover"
+        source={{uri: route.params.uri}}
+        ref={player => {videoPlayer = player}}
+        resizeMode='cover'
         paused={false}
-        onFullscreenPlayerDidDismiss={() => navigation.navigate('Home')}
-        onLoad={() => videoPlayer.presentFullscreenPlayer()}
-        // style={videoStyle}
+        onFullscreenPlayerDidDismiss={() => playerDismissed()}
+        onLoad={() => fullScreenPlayer()}
       />
     </SafeAreaView>
   );
